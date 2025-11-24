@@ -1,11 +1,10 @@
-// book.js
+new// book.js
 
 const BOOK_TITLE = "CLOUDFALL";
-const BOOK_SUBTITLE = "A Rider’s Story After the Cloud";
 
 const CHAPTERS = [
   {
-    title: "Synopsis – Page 1",
+    title: "Movie-Synopsis – Page 1",
     content: `
 CLOUDFALL follows Eli Navarro, a quiet night-shift network engineer at Helios, the company that runs most of the world’s cloud. From a lone operations room in Yuma, Arizona, Eli watches graphs and dashboards that show how the planet is talking to itself. Where other people see numbers, he reads weather in the way the lines curve and twitch.
 
