@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>CLOUDFALL – Reader</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --font-serif: "Georgia", "Iowan Old Style", "Times New Roman", serif;
+    }
+
+    body[data-theme="light"] {
+      --bg: #f5f1e8;        /* warm paper */
+      --text-main: #222222;
+      --text-muted: #6b6b6b;
+      --border-soft: #d4cbb8;
+      --accent: #444444;
+      --watermark-opacity: 0.05;
+    }
+
+    body[data-theme="dark"] {
+      --bg: #05060a;
+      --text-main: #e5e7eb;
+      --text-muted: #9ca3af;
+      --border-soft: #27272f;
+      --accent: #facc15;
+      --watermark-opacity: 0.06;
+    }
+
+    body {
+      min-height: 100vh;
+      background-color: var(--bg);
+      color: var(--text-main);
+      font-family: var(--font-serif);
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: flex-start;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* subtle Cloudfall watermark, like on the 404 */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: url("assets/cloudfall-fall.png") no-repeat center 14%;
+      background-size: 220px auto;
+      opacity: var(--watermark-opacity);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    header {
+      padding: 0.7rem 1rem;
+      border-bottom: 1px solid var(--border-soft);
+      background-color: rgba(245, 241, 232, 0.96);
+      position: sticky;
+      top: 0;
+      z-index: 2;
+    }
+
+    body[data-theme="dark"] header {
+      background-color: rgba(5, 6, 10, 0.96);
+    }
+
+    .header-row {
+      max-width: 720px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 0.75rem;
+    }
+
+    .brand {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .brand-title {
+      font-size: 0.9rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .brand-sub {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .meta-right {
+      display: flex;
+      gap: 0.9rem;
+      align-items: center;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .progress strong {
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    .theme-toggle {
+      border: none;
+      background: none;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      cursor: pointer;
+      padding: 0;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    .theme-toggle:hover {
+      color: var(--accent);
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      padding: 0.9rem 1rem 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .page {
+      max-width: 720px;
+      width: 100%;
+      padding: 1.8rem 0 2.4rem;
+    }
+
+    .chapter-title {
+      font-size: 0.95rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 1.6rem;
+    }
+
+    .chapter-body {
+      font-size: 1.02rem;
+      line-height: 1.8;
+      color: var(--text-main);
+      -webkit-font-smoothing: antialiased;
+      min-height: 55vh;
+    }
+
+    .chapter-body p {
+      margin-bottom: 1rem;
+    }
+
+    .tip-block {
+      margin-top: 1.6rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border-soft);
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .tip-block strong {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    a.tip-link {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a.tip-link:hover {
+      text-decoration: underline;
+    }
+
+    .nav-links {
+      margin-top: 2rem;
+      font-size: 0.9rem;
+      text-align: center;
+      color: var(--text-muted);
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+    }
+
+    .nav-links a:hover {
+      text-decoration: underline;
+    }
+
+    .nav-links .divider {
+      margin: 0 0.5rem;
+    }
+
+    footer {
+      border-top: 1px solid var(--border-soft);
+      padding: 0.8rem 1rem 1rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+  </style>
+</head>
+<body data-theme="light">
+  <header>
+    <div class="header-row">
+      <div class="brand">
+        <div class="brand-title" id="brandTitle">CLOUDFALL</div>
+        <div class="brand-sub" id="brandSub">A Rider’s Story After the Cloud</div>
+      </div>
+      <div class="meta-right">
+        <div class="progress" id="progressText">Chapter 1 of 1</div>
+        <button class="theme-toggle" type="button" id="themeToggle">
+          Dark mode
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <article class="page">
+      <h1 class="chapter-title" id="chapterTitle"></h1>
+      <div class="chapter-body" id="chapterBody"></div>
+
+      <div id="tipBlock" class="tip-block" style="display:none;">
+        <p>
+          You have reached the end of this route. If the story carried something
+          worth keeping, you can <strong>tip the rider</strong> and help send the
+          next message across the dark.
+        </p>
+        <p style="margin-top:0.6rem;">
+          <a class="tip-link" id="tipLink" href="#" target="_blank" rel="noopener noreferrer">
+            Tip the rider
+          </a>
+        </p>
+      </div>
+
+      <nav class="nav-links">
+        <a href="#" id="prevLink">Previous chapter</a>
+        <span class="divider">·</span>
+        <a href="#" id="nextLink">Next chapter</a>
+      </nav>
+    </article>
+  </main>
+
+  <footer>
+    <span id="footerLine">CLOUDFALL · a rider’s story after the cloud</span>
+  </footer>
+
+  <!-- Chapters are defined in book.js -->
+  <script src="book.js"></script>
+  <script>
+    const STORAGE_KEY_CHAPTER = "cloudfall_current_chapter";
+    const STORAGE_KEY_THEME = "cloudfall_theme";
+    const TIP_URL = "https://example.com/tip"; // replace with your real tip link
+
+    const titleEl = document.getElementById("chapterTitle");
+    const bodyEl = document.getElementById("chapterBody");
+    const progressEl = document.getElementById("progressText");
+    const tipBlock = document.getElementById("tipBlock");
+    const tipLink = document.getElementById("tipLink");
+    const brandTitle = document.getElementById("brandTitle");
+    const brandSub = document.getElementById("brandSub");
+    const themeToggle = document.getElementById("themeToggle");
+    const prevLink = document.getElementById("prevLink");
+    const nextLink = document.getElementById("nextLink");
+
+    if (typeof BOOK_TITLE === "string") {
+      brandTitle.textContent = BOOK_TITLE;
+    }
+    if (typeof BOOK_SUBTITLE === "string") {
+      brandSub.textContent = BOOK_SUBTITLE;
+    }
+
+    if (TIP_URL && TIP_URL !== "#") {
+      tipLink.href = TIP_URL;
+    }
+
+    let currentIndex = 0;
+
+    function setTheme(theme) {
+      document.body.setAttribute("data-theme", theme);
+      themeToggle.textContent = theme === "dark" ? "Light mode" : "Dark mode";
+      try {
+        localStorage.setItem(STORAGE_KEY_THEME, theme);
+      } catch (_) {}
+    }
+
+    function initTheme() {
+      let theme = "light";
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY_THEME);
+        if (stored === "light" || stored === "dark") {
+          theme = stored;
+        } else if (window.matchMedia &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches) {
+          theme = "dark";
+        }
+      } catch (_) {}
+      setTheme(theme);
+    }
+
+    themeToggle.addEventListener("click", () => {
+      const current = document.body.getAttribute("data-theme") || "light";
+      setTheme(current === "light" ? "dark" : "light");
+    });
+
+    function loadFromStorage() {
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY_CHAPTER);
+        if (stored !== null) {
+          const idx = parseInt(stored, 10);
+          if (!Number.isNaN(idx) && idx >= 0 && idx < CHAPTERS.length) {
+            currentIndex = idx;
+          }
+        }
+      } catch (_) {}
+    }
+
+    function saveToStorage() {
+      try {
+        localStorage.setItem(STORAGE_KEY_CHAPTER, String(currentIndex));
+      } catch (_) {}
+    }
+
+    function renderChapter() {
+      if (!Array.isArray(CHAPTERS) || CHAPTERS.length === 0) {
+        titleEl.textContent = "No chapters loaded";
+        bodyEl.textContent = "Add content to CHAPTERS in book.js.";
+        progressEl.textContent = "";
+        prevLink.style.visibility = "hidden";
+        nextLink.style.visibility = "hidden";
+        tipBlock.style.display = "none";
+        return;
+      }
+
+      const chapter = CHAPTERS[currentIndex];
+      titleEl.textContent = chapter.title || `Chapter ${currentIndex + 1}`;
+
+      const paragraphs = (chapter.content || "").trim().split(/\n\s*\n/);
+      bodyEl.innerHTML = "";
+      paragraphs.forEach(text => {
+        if (!text.trim()) return;
+        const p = document.createElement("p");
+        p.textContent = text.trim();
+        bodyEl.appendChild(p);
+      });
+
+      const total = CHAPTERS.length;
+      const humanIndex = currentIndex + 1;
+      progressEl.innerHTML = `Chapter <strong>${humanIndex}</strong> of ${total}`;
+
+      // nav link visibility / text
+      prevLink.style.visibility = currentIndex === 0 ? "hidden" : "visible";
+      nextLink.textContent = currentIndex === total - 1 ? "End" : "Next chapter";
+
+      // tip only on last chapter
+      tipBlock.style.display = currentIndex === total - 1 ? "block" : "none";
+
+      saveToStorage();
+    }
+
+    prevLink.addEventListener("click", (e) => {
+      e.preventDefault();
+      if (currentIndex > 0) {
+        currentIndex -= 1;
+        renderChapter();
+        window.scrollTo({ top: 0 });
+      }
+    });
+
+    nextLink.addEventListener("click", (e) => {
+      e.preventDefault();
+      const lastIndex = CHAPTERS.length - 1;
+      if (currentIndex < lastIndex) {
+        currentIndex += 1;
+        renderChapter();
+        window.scrollTo({ top: 0 });
+      } else {
+        tipBlock.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    });
+
+    // swipe navigation
+    let touchStartX = null;
+    document.addEventListener("touchstart", (e) => {
+      if (e.touches.length === 1) {
+        touchStartX = e.touches[0].clientX;
+      }
+    });
+
+    document.addEventListener("touchend", (e) => {
+      if (touchStartX === null) return;
+      const dx = e.changedTouches[0].clientX - touchStartX;
+      const threshold = 40;
+      if (dx > threshold && currentIndex > 0) {
+        currentIndex -= 1;
+        renderChapter();
+        window.scrollTo({ top: 0 });
+      } else if (dx < -threshold && currentIndex < CHAPTERS.length - 1) {
+        currentIndex += 1;
+        renderChapter();
+        window.scrollTo({ top: 0 });
+      }
+      touchStartX = null;
+    });
+
+    // arrow key navigation
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowLeft" && currentIndex > 0) {
+        currentIndex -= 1;
+        renderChapter();
+        window.scrollTo({ top: 0 });
+      } else if (e.key === "ArrowRight" && currentIndex < CHAPTERS.length - 1) {
+        currentIndex += 1;
+        renderChapter();
+        window.scrollTo({ top: 0 });
+      }
+    });
+
+    initTheme();
+    loadFromStorage();
+    renderChapter();
+  </script>
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>404 Not Found</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      background-color: #f9fafb;
+      color: #111827;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        url("assets/cloudfall-fall.png") no-repeat center 30%;
+      background-size: 220px auto;
+      opacity: 0.07;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      max-width: 640px;
+      width: 100%;
+      padding: 2rem 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    h2 {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: #4b5563;
+      margin-bottom: 1.25rem;
+    }
+
+    p {
+      font-size: 0.9rem;
+      color: #4b5563;
+      line-height: 1.6;
+      margin-bottom: 0.6rem;
+    }
+
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+        "Liberation Mono", "Courier New", monospace;
+      font-size: 0.85rem;
+      background: #e5e7eb;
+      padding: 0.1rem 0.3rem;
+      border-radius: 3px;
+    }
+
+    .meta {
+      margin-top: 1.2rem;
+      font-size: 0.8rem;
+      color: #9ca3af;
+    }
+
+    .meta span {
+      color: #6b7280;
+    }
+
+    .link-row {
+      margin-top: 1rem;
+      font-size: 0.9rem;
+    }
+
+    a {
+      color: #2563eb;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .hint {
+      margin-top: 0.75rem;
+      font-size: 0.8rem;
+      color: #6b7280;
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <h1>404 – Not Found</h1>
+    <h2>The requested resource could not be found on this server.</h2>
+
+    <p>
+      The URL you requested does not match any active route. It may have been
+      removed, renamed, or is temporarily unavailable.
+    </p>
+
+    <p>
+      If you typed the address manually, please double-check the spelling and
+      try again. If you followed a link from another page, the link may be out
+      of date.
+    </p>
+
+    <div class="link-row">
+      <p>
+        <a href="javascript:history.back()">← Go back to the previous page</a>
+      </p>
+      <p>
+        <a href="reader.html">Or continue to the current route.</a>
+      </p>
+    </div>
+
+    <div class="hint">
+      <p>
+        If you were actually trying to <code>grab_mochillo()</code>, this is
+        the correct endpoint.
+      </p>
+    </div>
+
+    <div class="meta">
+      <p>
+        <span>Status:</span> 404 Not Found<br />
+        <span>Server:</span> generic/httpd
+      </p>
+    </div>
+  </main>
+</body>
+</html>
